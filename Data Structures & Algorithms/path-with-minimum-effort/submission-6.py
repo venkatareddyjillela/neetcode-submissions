@@ -1,0 +1,27 @@
+import heapq
+class Solution:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        ROWS, COLS = len(heights), len(heights[0])
+        visit = set()
+        heap = [[0, 0, 0]] # diff, r, c
+        heapq.heapify(heap)
+        directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+        while heap:
+            diff, r, c = heapq.heappop(heap)
+
+            if (r, c) in visit:
+                continue
+
+            visit.add((r, c))
+
+            if r == ROWS-1 and c == COLS-1:
+                return diff
+            
+            for dr, dc in directions:
+                newR, newC = r+dr, c+dc
+                if newR < 0 or newC < 0 or newR >= ROWS or newC >= COLS:
+                        continue
+                newDiff = abs(heights[r][c] - heights[newR][newC])
+                newDiff = max(diff, newDiff)
+                heapq.heappush(heap, [newDiff, newR, newC])

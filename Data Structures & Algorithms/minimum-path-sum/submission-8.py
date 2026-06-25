@@ -1,0 +1,23 @@
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        ROWS, COLS = len(grid), len(grid[0])
+        if ROWS == 1 and COLS == 1:
+            return grid[0][0]
+        dp = [[float('inf')] * (COLS+1) for _ in range(ROWS+1)]
+        dp[ROWS-1][COLS-1] = 0
+        def dfs(r, c):
+            # if r < 0 or c < 0 or r >= ROWS or c >= COLS:
+            #     return float('inf')
+            
+            if dp[r][c] < float('inf'):
+                return dp[r][c]
+            
+            # res = min(grid[r+1][c] + dfs(r+1, c), grid[r][c+1] + dfs(r, c+1))
+            # dp[r][c] = float('inf')
+            if r+1 < ROWS:
+                dp[r][c] = min(dp[r][c], grid[r+1][c] + dfs(r+1, c))
+            if c+1 < COLS:
+                dp[r][c] = min(dp[r][c], grid[r][c+1] + dfs(r, c+1))
+            return dp[r][c]
+        
+        return dfs(0, 0) + grid[0][0]
